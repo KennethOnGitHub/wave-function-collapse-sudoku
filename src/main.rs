@@ -24,7 +24,6 @@ fn text_to_board(board_string: String) -> [[Option<u32> ; 9]; 9 ]{
         let y = i / 9;
         if c.is_digit(10) {
             board[x][y] = c.to_digit(10);
-        }else if c == '_' {
         }else {
             panic!("Sudoku File Has Invalid Char")
         }
