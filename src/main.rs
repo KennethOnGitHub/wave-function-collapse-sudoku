@@ -14,22 +14,21 @@ fn text_to_board(board_string: String) -> [[Option<u32> ; 9]; 9 ]{
 
     let board_chars = board_string
         .chars()
-        .filter(|&c| c.is_digit(10) || c == '\n' || c == '_');
+        .filter(|&c| c.is_digit(10) || c == '_');
 
-    let (mut i, mut j) = (0, 0);
+    //the problem is i had to choose between looping thru the chars and
+    //looping to 81, should have check to make sure these are the same
+    let mut i = 0;
     for c in board_chars {
-        println!("{c}");
+        let x = i % 9;
+        let y = i / 9;
         if c.is_digit(10) {
-            board[i][j] = c.to_digit(10);
-            i +=1;
+            board[x][y] = c.to_digit(10);
         }else if c == '_' {
-            i += 1;
-        }else if c == '\n' {
-            j += 1;
-            i = 0;
         }else {
             panic!("Sudoku File Has Invalid Char")
         }
+        i += 1;
     }
 
     return board;
