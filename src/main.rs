@@ -14,7 +14,7 @@ fn text_to_board(board_string: String) -> [[Option<u32> ; 9]; 9 ]{
 
     let board_chars = board_string
         .chars()
-        .filter(|&c| c != '-' || c != '|' || c != ' ');
+        .filter(|&c| c.is_digit(10) || c == '\n' || c == '_');
 
     let (mut i, mut j) = (0, 0);
     for c in board_chars {
