@@ -9,6 +9,7 @@ enum SudokuCell {
 }
 type SudokuBoard = Board<SudokuCell>;
 
+#[derive(Debug)]
 enum QuantumCell {
     Collapsed(u32),
     Superposition(HashSet<u32>),
@@ -55,7 +56,7 @@ impl QuantumBoard {
         fn propagate_collapse(board: &mut QuantumBoard, x: usize, y: usize, val: u32) {
             for i in 0..9 {
                 board.remove_posibility(x, i, val);
-                board.remove_posibility(y, x, val);
+                board.remove_posibility(i, y, val);
             }
 
             let nonadrant_x = x / 3;
@@ -97,14 +98,43 @@ fn main() {
     //             );
     // };
 
-    let entropy_board: Board<usize> = superposition_board.&board.map(|col: &[QuantumCell; 9]| {
-        col.map(|q_cell: QuantumCell| match &q_cell {
-            QuantumCell::Collapsed(_) => 0,
-            QuantumCell::Superposition(s) => s.len(),
-        })
-    });
+    // let entropy_board: Board<usize> = &superposition_board.board.map(|col: &[QuantumCell; 9]| {
+    //     col.map(|q_cell: QuantumCell| match &q_cell {
+    //         QuantumCell::Collapsed(_) => 0,
+    //         QuantumCell::Superposition(s) => s.len(),
+    //     })
+    // });
 
-    println!("{}", entropy_board[0][2])
+    let mut entropy_board: Board<usize> = [[0; 9]; 9];
+
+    for (x, column) in superposition_board.board.iter().enumerate() {
+        for (y, cell) in column.iter().enumerate() {
+            entropy_board[x][y] = match cell {
+                QuantumCell::Collapsed(_) => 0,
+                QuantumCell::Superposition(s) => s.len()
+            };
+        }
+    };
+
+    // println!("{}", entropy_board[2][0]);
+
+    // for y in 0..9 {
+    //     println!("");
+    //     for x in 0..9 {
+    //         match superposition_board.board[x][y] {
+    //             QuantumCell::Collapsed(_) => print!("-"),
+    //             QuantumCell::Superposition(_) => print!("{:?}", superposition_board.board[x][y])
+    //         };
+    //     }  
+    // };
+
+    // for y in 0..9 {
+    //     println!("");
+    //     for x in 0..9 {
+    //         print!("{}", entropy_board[x][y]);
+    //     }  
+    // };
+
 }
 
 fn text_to_board(board_string: String) -> Board<SudokuCell> {
