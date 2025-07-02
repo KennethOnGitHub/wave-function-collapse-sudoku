@@ -97,13 +97,12 @@ fn main() {
     //             );
     // };
 
-    let entropy_board: Board<usize> = superposition_board.board.map(|col: [QuantumCell; 9]| {
+    let entropy_board: Board<usize> = superposition_board.&board.map(|col: &[QuantumCell; 9]| {
         col.map(|q_cell: QuantumCell| match &q_cell {
             QuantumCell::Collapsed(_) => 0,
             QuantumCell::Superposition(s) => s.len(),
         })
     });
-
 
     println!("{}", entropy_board[0][2])
 }
